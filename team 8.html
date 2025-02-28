@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Shopping</title>
+    
+    <style>
+       
+       body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(90deg, rgba(2, 0, 6, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;      /* Centers vertically */
+    color: white;
+}
+h1 {
+    text-align: center;  /* Center the heading horizontally */
+    font-size: 3em;      /* Make the heading larger */
+    margin-bottom: 20px; /* Optional space below the heading */
+}
+.container {
+    text-align: center;
+    padding:50px;
+}
+
+.festival-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
+    margin: 50px;
+}
+
+        .hide { 
+            display: none;
+        }
+        .product, .cart-item {
+            border: 1px solid #ddd;
+            padding: 10px; 
+            margin: 10px; 
+            display: inline-block; 
+            width: 200px;
+        }
+        .btn { 
+            padding: 10px; 
+            margin: 5px; 
+            cursor: pointer;
+            border: none; 
+            border-radius: 5px; 
+        }
+        .festival-btn { 
+            background-color:transparent;
+            color: white; 
+            width: 300px;  /* Increased width for button */
+            padding: 10px; /* Added some padding to make the button taller */
+            text-align: center;
+            display: inline-block;
+        }
+        .cart-btn { background-color: green; color: white; }
+        .remove-btn { background-color: red; color: white; }
+        .checkout-btn { background-color: blue; color: white; }
+        .cart { position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; border-radius: 50%; cursor: pointer; }
+        .thank-you { 
+            font-size: 24px; color: green; margin-top: 20px;
+        }
+    
+        /* Adjust grid layout for festival buttons */
+        
+        /* Adjust image size */
+        .festival-btn img { 
+            width: 100%;  /* Set image width to 100% of its parent container */
+            height: 200px;  /* Increased image height */
+            object-fit: cover; 
+            margin-bottom: 5px; /* Space between image and caption */
+        }
+    
+        /* Increase caption font size */
+        .festival-btn figcaption { 
+            margin-top: 5px; 
+            font-size: 18px;  /* Increased font size of the caption */
+            font-weight: bold;
+        }
+    </style>
+        
+</head>
+<body>
+
+    <!-- Home Page -->
+    <div id="home">
+        <h1>Welcome to Festival Shopping</h1>
+        <div class="container festival-grid">
+            <button class="btn festival-btn" onclick="selectFestival('Diwali')">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/002/475/549/small_2x/colorful-firework-background-free-vector.jpg" alt="Diwali">
+                <figcaption>Diwali</figcaption>
+            </button>
+            <button class="btn festival-btn" onclick="selectFestival('Christmas')">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/053/723/513/small_2x/merry-christmas-greeting-card-on-sightly-red-background-new-year-greeting-photo.jpg" alt="Christmas">
+                <figcaption> Christmas</figcaption>
+            </button>
+            <button class="btn festival-btn" onclick="selectFestival('Halloween')">
+                <img src="https://cdn.britannica.com/73/132673-050-AD33F71E/Children-Halloween-costumes.jpg" alt="Halloween">
+                <figcaption> Halloween</figcaption>
+            </button>
+            <button class="btn festival-btn" onclick="selectFestival('Holi')">
+                <img src="https://hinduismtoday.b-cdn.net/wp-content/uploads/2010/04/holi111-1024x684.jpg" alt="Holi">
+                <figcaption>Holi</figcaption>
+            </button>
+            <button class="btn festival-btn" onclick="selectFestival('Dusshra')">
+                <img src="https://cdn.britannica.com/12/262512-050-F4A08A21/An-effigy-of-Ravana-the-10-headed-king-of-the-demons-rakshasas-goes-up-in-flames-marking-the-end-of-Dussehra-festival-at-Ghatkopar-on-October-24-2023-in-Mumbai-India-Hinduism-Hindu-mythology.jpg" alt="Dusshra">
+                <figcaption>Dusshra</figcaption>
+            </button>
+            <button class="btn festival-btn" onclick="selectFestival('New Year')">
+                <img src="https://paytmblogcdn.paytm.com/wp-content/uploads/2024/12/new-year.jpg" alt="New Year">
+                <figcaption> New Year</figcaption>
+            </button>
+        </div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products-page" class="hide">
+        <h1 id="festival-title"></h1>
+        <div id="product-list" class="container"></div>
+        <button class="btn" onclick="showHome()">⬅ Back</button>
+        <div class="cart" onclick="showCart()">🛒 <span id="cart-count">0</span></div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart-page" class="hide">
+        <h1>Your Cart</h1>
+        <div id="cart-items" class="container"></div>
+        <h2>Total: $<span id="total-price">0</span></h2>
+        
+        <!-- Coupon Section -->
+        <input type="text" id="coupon" placeholder="Enter Coupon Code" style="padding: 5px;">
+        <button class="btn" onclick="applyCoupon()">Apply</button>
+        <p id="discount-msg"></p>
+
+        <button class="btn checkout-btn" onclick="showAddressForm()">Proceed to Checkout</button>
+        <button class="btn" onclick="showProducts()">⬅ Back</button>
+
+        <!-- Address Input -->
+        <div id="address-form" class="hide">
+            <h3>Enter Address</h3>
+            <input type="text" id="address" placeholder="Enter your address" style="width: 200px; padding: 5px;">
+            <button class="btn checkout-btn" onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+
+    <!-- Thank You Page -->
+    <div id="thank-you-page" class="hide">
+        <h1>Thank You for Your Purchase!</h1>
+        <p>Your order has been placed successfully. We will deliver your items soon.</p>
+        <button class="btn" onclick="showHome()">Go to Home</button>
+    </div>
+
+    <script>
+        let products = {
+            "Diwali": [
+                { name: "Diyas", price: 5, img: "https://www.hindustantimes.com/ht-img/img/2023/11/09/550x309/umesh-soni-H4ilfu3vftk-unsplash_1699521670352_1699521705408.jpg" },
+                { name: "Sweets Box", price: 20, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnhR3XmFayokYt7rq8X1Bw7oGlQvJ5q3jRzQ&s" },
+                { name: "Lantern", price: 15, img: "https://tekled.co.uk/cdn/shop/articles/what-lantern-is-509240.jpg?v=1685397136" }
+            ],
+            "Christmas": [
+                { name: "Christmas Tree", price: 50, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSThsjf_KrDK85tum2DxCMU2dku7aFWFAHMVQ&s" },
+                { name: "Gift Box", price: 30, img: "https://www.bigbasket.com/media/uploads/p/l/40321116_2-urbanfest-urbanfest-hanging-decorative-big-gift-box-for-christmas-tree-colour-assorted-pack-of-6.jpg" },
+                { name: "Fairy Lights", price: 10, img: "https://ledmarket.in/wp-content/uploads/2023/11/225068713_max-e1698954018928.jpg" }
+            ],
+            "Halloween": [
+                { name: "Pumpkin", price: 15, img: "https://media.gettyimages.com/id/1184857940/photo/halloween-pumpkins.jpg?s=612x612&w=gi&k=20&c=7ngpU3CuTv6a1rLkKkpT3zASzc5wAWNJ_lGwSV5gyoI=" },
+                { name: "Ghost Decoration", price: 10, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtJM1cxd0SmfzTWym7euFtZ4MiwRgImpb5lQ&s" },
+                { name: "Candy Bag", price: 5, img: "https://media6.ppl-media.com//tr:h-235,w-235,c-at_max,dpr-2/static/img/product/269180/sq-hand-bag_4_display_1643716148_972058f7.jpg" }
+            ],
+            "Dusshra": [
+                { name: "fruits", price: 15, img: "https://www.flowers2jabalpur.com/productimages/DFCSUUN345-BAS_big.jpg" },
+                { name: "flowers", price: 10, img: "https://www.themaevastore.com/cdn/shop/articles/WhatsApp_Image_2024-09-18_at_17.12.42_c2fd79e6.jpg?v=1726662553" },
+                { name: "durga devi idol", price: 5, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh3_oOmqmWUqUdi_8sFJOf3KXt-n9FEAphZh-U-pDyL0MNUVwkDBn35Pz5MbsZrxQdLVg&usqp=CAU" }
+            ],
+            "Holi": [
+                { name: "Colours", price: 15, img: "https://5.imimg.com/data5/SELLER/Default/2023/6/315291340/PC/NP/HD/5127974/oil-soluble-dyes.jpg" },
+                { name: "water guns", price: 10, img: "https://www.shutterstock.com/image-photo/bangkok-thailand-march-17-2019-260nw-1353198593.jpg" },
+                { name: "drums", price: 5, img: "https://thumbs.dreamstime.com/b/vibrant-celebration-indian-holi-festival-musician-playing-drums-depicting-joy-culture-tradition-vibrant-celebration-354112126.jpg" }
+            ],
+            "New Year": [
+                { name: "Party Hat", price: 5, img: "https://m.media-amazon.com/images/I/618SqYURiVL._AC_UY350_.jpg" },
+                { name: "Confetti Pack", price: 8, img: "https://m.media-amazon.com/images/I/81Q8ghvnooL._AC_UF1000,1000_QL80_.jpg" },
+                { name: "2025 Glasses", price: 3, img: "https://m.media-amazon.com/images/I/61t4nwpv+-L._AC_UY350_.jpg" }
+            ]
+        };
+
+        let cart = [];
+        let selectedFestival = "";
+
+        function selectFestival(festival) {
+            selectedFestival = festival;
+            document.getElementById("festival-title").innerText = `${festival} Specials`;
+            showProducts();
+            let productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            products[festival].forEach(product => {
+                productList.innerHTML += `
+                    <div class="product">
+                        <img src="${product.img}" alt="${product.name}" style="width: 100%; height: 150px; object-fit: cover;">
+                        <h3>${product.name}</h3>
+                        <p>Price: $${product.price}</p>
+                        <button class="btn cart-btn" onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById("cart-count").innerText = cart.length;
+        }
+
+        function showCart() {
+            document.getElementById("home").classList.add("hide");
+            document.getElementById("products-page").classList.add("hide");
+            document.getElementById("cart-page").classList.remove("hide");
+            renderCart();
+        }
+
+        function renderCart() {
+            let cartItemsDiv = document.getElementById("cart-items");
+            let totalPrice = 0;
+            cartItemsDiv.innerHTML = "";
+            cart.forEach((item, index) => {
+                totalPrice += item.price;
+                cartItemsDiv.innerHTML += `
+                    <div class="cart-item">
+                        <h3>${item.name}</h3>
+                        <p>Price: $${item.price}</p>
+                        <button class="btn remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            document.getElementById("total-price").innerText = totalPrice;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+            updateCart();
+        }
+
+        function applyCoupon() {
+            let couponCode = document.getElementById("coupon").value;
+            let discountMsg = document.getElementById("discount-msg");
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            if (couponCode === "DIWALI10" && selectedFestival === "Diwali") {
+                total *= 0.9;
+                discountMsg.innerText = "10% Diwali Discount Applied!";
+            } else if (couponCode === "XMAS15" && selectedFestival === "Christmas") {
+                total *= 0.85;
+                discountMsg.innerText = "15% Christmas Discount Applied!";
+            } else {
+                discountMsg.innerText = "❌ Invalid Coupon!";
+            }
+
+            document.getElementById("total-price").innerText = total.toFixed(2);
+        }
+
+        function showAddressForm() {
+            document.getElementById("address-form").classList.remove("hide");
+        }
+
+        function placeOrder() {
+            let address = document.getElementById("address").value;
+            if (!address.trim()) {
+                alert("Please enter your address.");
+                return;
+            }
+            alert("🎉 Order placed successfully!");
+            cart = [];
+            updateCart();
+            showThankYou();
+        }
+
+        function showThankYou() {
+            document.getElementById("cart-page").classList.add("hide");
+            document.getElementById("thank-you-page").classList.remove("hide");
+        }
+
+        function showHome() {
+            document.getElementById("home").classList.remove("hide");
+            document.getElementById("products-page").classList.add("hide");
+            document.getElementById("cart-page").classList.add("hide");
+            document.getElementById("thank-you-page").classList.add("hide");
+        }
+
+        function showProducts() {
+            document.getElementById("home").classList.add("hide");
+            document.getElementById("products-page").classList.remove("hide");
+            document.getElementById("cart-page").classList.add("hide");
+        }
+    </script>
+    
+</body>
+</html>
+
